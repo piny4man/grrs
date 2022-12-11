@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.0", features = ["derive"] }
 anyhow = "1.0"
+ansi_term = "0.12"

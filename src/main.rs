@@ -1,5 +1,6 @@
 #![allow(unused)]
 
+use ansi_term::Colour::Yellow;
 use anyhow::{Context, Result};
 use clap::Parser;
 
@@ -30,7 +31,7 @@ fn main() -> Result<()> {
     // COMMENT: Error handling method 4
     let content = std::fs::read_to_string(&args.path)
         .with_context(|| format!("Could not read file `{}`", &args.path.display()))?;
-    println!("File content: {}", content);
+    println!("File content: {}", Yellow.paint(content));
     Ok(())
 
 
