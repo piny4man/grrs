@@ -3,6 +3,9 @@
 use ansi_term::Colour::Yellow;
 use anyhow::{Context, Result};
 use clap::Parser;
+use std::io::{self, Write};
+use indicatif::ProgressBar;
+use log::{info, warn};
 
 #[derive(Parser)]
 struct Cli {
@@ -14,7 +17,22 @@ struct Cli {
 // struct CustomError(String);
 
 fn main() -> Result<()> {
+    // USEFUL: run command `env RUST_LOG=info cargo run --bin grrs -- foo test.txt` to see logs
+    env_logger::init();
+    info!("Starting up");
+    let stdout = io::stdout(); // get the global stdout entity
+    let mut handle = io::BufWriter::new(stdout); // optional: wrap that handle in a buffer
     let args = Cli::parse();
+
+    // Progress bar example
+    let pb = indicatif::ProgressBar::new(100);
+    for i in 0..100 {
+        // do_hard_work();
+        pb.println(format!("[+] finished #{}", i));
+        pb.inc(1);
+    }
+    pb.finish_with_message("done");
+
     // LEARN: Optimize it using BufReader to liberate read the whole file into memory
     // COMMENT: Error handling method 1
     // let result = std::fs::read_to_string(&args.path);
@@ -29,9 +47,10 @@ fn main() -> Result<()> {
     // let content = std::fs::read_to_string(&args.path)
     //     .map_err(|err| CustomError(format!("Error reading `{}`: {}", &args.path.display(), err)))?;
     // COMMENT: Error handling method 4
+    warn!("Going to check if file exists!");
     let content = std::fs::read_to_string(&args.path)
         .with_context(|| format!("Could not read file `{}`", &args.path.display()))?;
-    println!("File content: {}", Yellow.paint(content));
+    writeln!(handle, "File content: {}", Yellow.paint(content));
     Ok(())
 
 
