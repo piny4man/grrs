@@ -1,5 +1,5 @@
 [package]
-name = "grrs"
+name = "pinyagrep"
 version = "0.1.0"
 edition = "2021"
 authors = ["Piny4man <development@pinya.dev>"]
