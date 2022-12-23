@@ -2,6 +2,14 @@
 name = "grrs"
 version = "0.1.0"
 edition = "2021"
+authors = ["Piny4man <development@pinya.dev>"]
+license = "MIT OR Apache-2.0"
+description = "A tool to search files"
+readme = "README.md"
+homepage = "https://git.pinya.dev/piny4man/grrs"
+repository = "https://git.pinya.dev/piny4man/grrs"
+keywords = ["cli", "search", "demo"]
+categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
