@@ -53,6 +53,6 @@ fn main() -> Result<()> {
     writeln!(handle, "File content: {}", Yellow.paint(&content));
     // Ok(())
 
-    grrs::find_matches(&content, &args.pattern, &mut std::io::stdout());
+    pinyagrep::find_matches(&content, &args.pattern, &mut std::io::stdout());
     Ok(())
 }
