@@ -6,6 +6,9 @@ use clap::Parser;
 use std::io::{self, Write};
 use indicatif::ProgressBar;
 use log::{info, warn};
+use signal_hook::{consts::SIGINT, iterator::Signals};
+use std::{error::Error, thread, time::Duration};
+use crossbeam_channel::{bounded, tick, Receiver, select, internal::select};
 
 #[derive(Parser)]
 struct Cli {
@@ -17,6 +20,43 @@ struct Cli {
 // struct CustomError(String);
 
 fn main() -> Result<()> {
+    // COMMENT: Working with ctrl_c cratee
+    // ctrlc::set_handler(move || {
+    //     println!("Exiting...");
+    // })
+    // .expect("Error setting Ctrl-C handler");
+
+    // COMMENT: Working with signals
+    // let mut signals = Signals::new(&[SIGINT])?;
+
+    // thread::spawn(move || {
+    //     for sig in signals.forever() {
+    //         println!("Received signal {:?}", sig);
+    //         break;
+    //     }
+    // });
+
+    // COMMENT: Working with channels
+    let ctrl_c_events = pinyagrep::ctrl_channel()?;
+    let ticks = tick(Duration::from_secs(1));
+
+    loop {
+        select! {
+            recv(ticks) -> _ => {
+                println!("working!");
+            }
+            recv(ctrl_c_events) -> _ => {
+                println!();
+                println!("Goodbye!");
+                break;
+            }
+        }
+    }
+
+    // Following code does the actual work, and can be interrupted by pressing
+    // Ctrl-C. As an example: Let's wait a few seconds.
+    thread::sleep(Duration::from_secs(2));
+
     // USEFUL: run command `env RUST_LOG=info cargo run --bin grrs -- foo test.txt` to see logs
     env_logger::init();
     info!("Starting up");

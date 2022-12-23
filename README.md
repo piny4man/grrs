@@ -1,4 +1,4 @@
-# grrs
+# pinyagrep
 
 Rust CLI `grep` clone.
 
